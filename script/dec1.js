@@ -14,7 +14,6 @@ findTotalMassFuel = function(mass){
         console.log('Total mass fuel now for mass ' + mass + ' is ' + totalMassFuel);
         mass = massFuel;
     }while(massFuel > 5)
-    console.log('******************')
     return totalMassFuel;
 }
 
@@ -25,8 +24,6 @@ const findTotalRequiredFuel = function(masses,  findFuel){
     , 0)
     return reqFuel;
 }
-
-//console.log(findTotalMassFuel([100756]))
 
 console.log('Total fuel for problem 1 : ' + findTotalRequiredFuel(massInfo, findMassFuel))
 console.log('Total fuel for problem 2 : ' + findTotalRequiredFuel(massInfo, findTotalMassFuel))
