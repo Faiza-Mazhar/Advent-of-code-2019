@@ -38,7 +38,7 @@ const findNounVerbPair = function(intCode){
 }
 
 
-console.log(findFinalPosition([...intCode], 12, 2));
-console.log(findNounVerbPair(intCode));
+console.log('Part 1', findFinalPosition([...intCode], 12, 2));
+console.log('Part 2', findNounVerbPair(intCode));
 
 
