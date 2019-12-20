@@ -11,12 +11,10 @@ findTotalMassFuel = function(mass){
     do{
         massFuel = findMassFuel(mass);
         totalMassFuel += massFuel;
-        console.log('Total mass fuel now for mass ' + mass + ' is ' + totalMassFuel);
         mass = massFuel;
     }while(massFuel > 5)
     return totalMassFuel;
 }
-
 
 const findTotalRequiredFuel = function(masses,  findFuel){
     let reqFuel = masses.reduce(
