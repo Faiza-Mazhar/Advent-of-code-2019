@@ -1,5 +1,5 @@
 const fs = require('fs');
-let intCode = fs.readFileSync('../input/dec5', 'utf8').split(',').map((item) => parseInt(item));
+let intCodeInput = fs.readFileSync('../input/dec7', 'utf8').split(',').map((item) => parseInt(item));
 
 
 let MODE = {
@@ -11,15 +11,13 @@ let OPCODE = {
     ADDITION : '01',
     MULTIPLY: '02',
     INPUT: '03',
-    OUTPUT: '04',
+    output: '04',
     JUMP_IF_TRUE: '05',
     JUMP_IF_FALSE: '06',
     LESS_THAN: '07',
     EQUALS: '08',
     HALT_OPCODE: '99'
 }
-
-
 
 const manageOpcode = (opcode) => {
     opcode = opcode.toString();
@@ -33,12 +31,14 @@ const manageOpcode = (opcode) => {
     return opcode
 }
 
-const runTest = (intCode, inputValue) => {
+const runTest = (myIntCode, inputValue, phaseInput) => {
 
+    let intCode = myIntCode.map(code => code)
     let input = inputValue;
     let output = [];
     let instructionPointer = 0
     let HALT_OPCODE = false;
+    let phaseInputUsed = false;
     while(instructionPointer <= intCode.length && !HALT_OPCODE){
         let opcodes = manageOpcode(intCode[instructionPointer]);
         let value1, value2;
@@ -60,13 +60,19 @@ const runTest = (intCode, inputValue) => {
                 break;
 
             case OPCODE.INPUT: //3
-
+                
                 positionAddress = intCode[instructionPointer+1];
-                intCode[positionAddress] = input; 
+
+                if(!phaseInputUsed){
+                    intCode[positionAddress] = phaseInput; 
+                    phaseInputUsed = true;
+                } else {
+                    intCode[positionAddress] = input; 
+                }
                 instructionPointer += 2;
                 break;
 
-            case OPCODE.OUTPUT: //4
+            case OPCODE.output: //4
 
                 positionAddress = intCode[instructionPointer+1];
                 output.push(intCode[positionAddress])
@@ -100,7 +106,7 @@ const runTest = (intCode, inputValue) => {
                 break
         } 
     }
-    return output;
+    return output[0];
 }
 
 const findValueBasedOnParameterMode = function(intCode, parameterMode, valueIndex){
@@ -114,8 +120,49 @@ const findValueBasedOnParameterMode = function(intCode, parameterMode, valueInde
     return value;
 }
 
-// console.log("part 1",runTest(intCode, 1));
-console.log("part 2", runTest(intCode, 5));
+const createPermutations = (inputArr) => {
+    let result = [];
+    const permute = (arr, m = []) => {
+    if (arr.length === 0){
+        result.push(m)
+        } else {
+        for (let i = 0; i < arr.length; i++) {
+          let curr = arr.slice();
+          let next = curr.splice(i, 1);
+          permute(curr.slice(), m.concat(next))
+       }
+     }
+   }
+   permute(inputArr)
+   return result;
+  }
+const possiblePermutation = createPermutations([0,1,2,3,4])
 
+const makeAmplifier = (intCodeInput, sequence) => {
+    let output = 0;
+    sequence.forEach(currentAmplifier => {
+        output = runTest(intCodeInput, output, parseInt(currentAmplifier));
+    })
+    return output;
+}
 
-export {runTest};
+const amplifierPart2 = (intCodeInput, sequence) => {
+    let output = 0;
+
+    
+}
+
+const runAmplifier = (possiblePermutation) => {
+    let maxThrusterValue = -1;
+    
+    possiblePermutation.forEach( permutation => {
+        let power = makeAmplifier(intCodeInput, permutation)
+        if(power > maxThrusterValue)
+            maxThrusterValue = power;
+    })
+
+    return maxThrusterValue;
+}
+
+console.log(runAmplifier(possiblePermutation));
+
