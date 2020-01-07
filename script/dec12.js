@@ -76,6 +76,6 @@ const findFinalEnergy = function(moons, velocityInfo){
     console.log(step)
 }
 
-const find
+
 
 console.log(findFinalEnergy(positionS, velocityS));
